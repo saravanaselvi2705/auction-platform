@@ -126,13 +126,13 @@ export default function BuyerDashboard() {
                   const prod = b.product;
                   if (!prod) return null;
 
-                  const isWinning = prod.highestBidder === user?.id;
+                  const isWinning = prod.highestBidder === user?.id || prod.highestBidder === user?._id;
                   const isClosed = prod.status === "closed";
                   const imageFallback = "https://images.unsplash.com/photo-1546213290-e1b7610339e5?q=80&w=600&auto=format&fit=crop";
 
                   const getBidStatus = () => {
                     if (isClosed) {
-                      return prod.winner === user?.id
+                      return (prod.winner === user?.id || prod.winner === user?._id)
                         ? { label: "Won", variant: "success" }
                         : { label: "Ended", variant: "danger" };
                     }

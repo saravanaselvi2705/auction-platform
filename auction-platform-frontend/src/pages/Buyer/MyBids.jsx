@@ -74,12 +74,12 @@ export default function MyBids() {
                   const prod = b.product;
                   if (!prod) return null;
 
-                  const isWinning = prod.highestBidder === user?.id;
+                  const isWinning = prod.highestBidder === user?.id || prod.highestBidder === user?._id;
                   const isClosed = prod.status === "closed";
 
                   const getMyStatus = () => {
                     if (isClosed) {
-                      return prod.winner === user?.id
+                      return (prod.winner === user?.id || prod.winner === user?._id)
                         ? { label: "Won", variant: "success" }
                         : { label: "Lost", variant: "danger" };
                     }

@@ -32,7 +32,7 @@ export default function WonAuction() {
             if (
               prod &&
               prod.status === "closed" &&
-              prod.winner === user?.id &&
+              (prod.winner === user?.id || prod.winner === user?._id) &&
               !seenProducts.has(prod._id)
             ) {
               seenProducts.add(prod._id);

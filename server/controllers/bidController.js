@@ -1,8 +1,10 @@
 import Bid from "../models/Bid.js";
 import Product from "../models/Product.js";
+import { autoCloseExpiredAuctions } from "../utils/autoClose.js";
 
 export const placeBid = async (req, res) => {
   try {
+    await autoCloseExpiredAuctions();
     const { amount } = req.body;
 
     const product = await Product.findById(req.params.id);

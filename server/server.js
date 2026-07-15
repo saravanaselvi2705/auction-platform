@@ -9,11 +9,15 @@ import productRoutes from "./routes/productRoutes.js";
 import bidRoutes from "./routes/bidRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+import { autoCloseExpiredAuctions } from "./utils/autoClose.js";
 
 dotenv.config();
 
 // Connect MongoDB
 connectDB();
+
+// Periodically auto-close expired auctions in the background every 10 seconds
+setInterval(autoCloseExpiredAuctions, 10000);
 
 const app = express();
 

@@ -1,6 +1,7 @@
 import Product from "../models/Product.js";
 import User from "../models/User.js";
 import sendEmail from "../utils/sendEmail.js";
+import { autoCloseExpiredAuctions } from "../utils/autoClose.js";
 
 // Add Product
 export const addProduct = async (req, res) => {
@@ -46,6 +47,7 @@ export const addProduct = async (req, res) => {
 // Get All Products
 export const getAllProducts = async (req, res) => {
   try {
+    await autoCloseExpiredAuctions();
     const products = await Product.find()
       .populate("seller", "name email");
 
@@ -65,7 +67,7 @@ export const getAllProducts = async (req, res) => {
 // Get Single Product
 export const getProductById = async (req, res) => {
   try {
-
+    await autoCloseExpiredAuctions();
     const product = await Product.findById(req.params.id)
       .populate("seller", "name email");
 

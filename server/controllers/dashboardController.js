@@ -1,10 +1,11 @@
 import Product from "../models/Product.js";
 import Bid from "../models/Bid.js";
+import { autoCloseExpiredAuctions } from "../utils/autoClose.js";
 
 
 export const sellerDashboard = async (req, res) => {
   try {
-
+    await autoCloseExpiredAuctions();
     // Find all products created by the logged-in seller
     const products = await Product.find({
       seller: req.user._id,
@@ -51,7 +52,7 @@ export const sellerDashboard = async (req, res) => {
 
 export const buyerDashboard = async (req, res) => {
   try {
-
+    await autoCloseExpiredAuctions();
     const bids = await Bid.find({
       bidder: req.user._id,
     }).populate("product");
