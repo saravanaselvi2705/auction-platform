@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { getBuyerDashboard } from "../../services/dashboardService";
+import { getImageUrl } from "../../utils/getImageUrl";
 import { useAuth } from "../../context/AuthContext";
 import PageTitle from "../../components/common/PageTitle";
 import Loader from "../../components/common/Loader";
@@ -94,7 +95,7 @@ export default function MyBids() {
                       <td className="px-6 py-4 min-w-[220px]">
                         <div className="flex items-center gap-3">
                           <img
-                            src={prod.image || imageFallback}
+                            src={getImageUrl(prod.image)}
                             alt={prod.title}
                             className="h-10 w-10 rounded-lg object-cover border"
                           />

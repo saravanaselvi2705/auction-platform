@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { getSellerDashboard } from "../../services/dashboardService";
 import { deleteProduct, closeAuction } from "../../services/productService";
+import { getImageUrl } from "../../utils/getImageUrl";
 import PageTitle from "../../components/common/PageTitle";
 import Loader from "../../components/common/Loader";
 import EmptyState from "../../components/common/EmptyState";
@@ -112,7 +113,7 @@ export default function MyProducts() {
                     <td className="px-6 py-4 min-w-[220px]">
                       <div className="flex items-center gap-3">
                         <img
-                          src={p.image || imageFallback}
+                          src={getImageUrl(p.image)}
                           alt={p.title}
                           className="h-10 w-10 rounded-lg object-cover border"
                         />

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { getBuyerDashboard } from "../../services/dashboardService";
+import { getImageUrl } from "../../utils/getImageUrl";
 import { useAuth } from "../../context/AuthContext";
 import PageTitle from "../../components/common/PageTitle";
 import Loader from "../../components/common/Loader";
@@ -146,7 +147,7 @@ export default function BuyerDashboard() {
                     <div key={b._id} className="p-5 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
                       <div className="flex items-center gap-4 min-w-0">
                         <img
-                          src={prod.image || imageFallback}
+                          src={getImageUrl(prod.image)}
                           alt={prod.title}
                           className="h-12 w-12 rounded-xl object-cover border border-gray-100"
                         />

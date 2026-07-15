@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Badge from "../ui/Badge";
 import Card from "../ui/Card";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 export default function ProductCard({ product }) {
   const [timeLeft, setTimeLeft] = useState("");
@@ -55,7 +56,7 @@ export default function ProductCard({ product }) {
     <Card className="flex flex-col h-full">
       <div className="relative">
         <img
-          src={product.image || imageFallback}
+          src={getImageUrl(product.image)}
           alt={product.title}
           className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
         />

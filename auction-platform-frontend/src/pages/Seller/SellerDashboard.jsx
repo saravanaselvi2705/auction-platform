@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { getSellerDashboard } from "../../services/dashboardService";
 import { useAuth } from "../../context/AuthContext";
+import { getImageUrl } from "../../utils/getImageUrl";
 import PageTitle from "../../components/common/PageTitle";
 import Loader from "../../components/common/Loader";
 import StatsCard from "../../components/dashboard/StatsCars";
@@ -125,7 +126,7 @@ export default function SellerDashboard() {
                     <div key={p._id} className="p-5 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
                       <div className="flex items-center gap-4 min-w-0">
                         <img
-                          src={p.image || imageFallback}
+                          src={getImageUrl(p.image)}
                           alt={p.title}
                           className="h-12 w-12 rounded-xl object-cover border border-gray-100"
                         />
