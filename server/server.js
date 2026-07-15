@@ -25,15 +25,9 @@ const app = express();
    CORS Configuration
 ============================================ */
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://auction-platform-silk.vercel.app",
-];
-
 app.use(
   cors({
-    origin: allowedOrigins,
-    credentials: true,
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
