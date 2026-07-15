@@ -203,7 +203,7 @@ export const closeAuction = async (req, res) => {
     const winner = await User.findById(product.highestBidder);
 
 if (winner) {
-  await sendEmail(
+  sendEmail(
     winner.email,
     "Congratulations! You Won the Auction",
     `Congratulations ${winner.name},
@@ -215,7 +215,9 @@ Product: ${product.title}
 Winning Bid: ₹${product.highestBid}
 
 Thank you for participating.`
-  );
+  ).catch((err) => {
+    console.error("Failed to send winning notification email:", err.message);
+  });
 }
 
     res.status(200).json({

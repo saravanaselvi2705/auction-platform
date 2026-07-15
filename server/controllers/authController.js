@@ -168,12 +168,14 @@ export const forgotPassword = async (req, res) => {
       </div>
     `;
 
-    await sendEmail(
+    sendEmail(
       user.email,
       "Password Reset Link - AuctionHub",
       `To reset your password, please click this link: ${resetUrl}`,
       emailHtml
-    );
+    ).catch((err) => {
+      console.error("Failed to send reset email:", err.message);
+    });
 
     res.status(200).json({
       success: true,
