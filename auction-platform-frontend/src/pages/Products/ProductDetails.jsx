@@ -25,6 +25,7 @@ export default function ProductDetails() {
   const { user } = useAuth();
 
   const [product, setProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState("");
   const [bids, setBids] = useState([]);
   const [loading, setLoading] = useState(true);
   const [biddingLoading, setBiddingLoading] = useState(false);
@@ -53,6 +54,7 @@ export default function ProductDetails() {
         const prodRes = await getProductById(id);
         if (active && prodRes.success && prodRes.product) {
           setProduct(prodRes.product);
+          setSelectedImage(prodRes.product.image || (prodRes.product.images && prodRes.product.images[0]) || "");
         }
 
         const bidsRes = await getBidHistory(id);
@@ -184,6 +186,7 @@ export default function ProductDetails() {
   const currentPrice = product.highestBid > 0 ? product.highestBid : product.startingPrice;
   const isSeller = user && user.id === product.seller?._id;
   const imageFallback = "https://images.unsplash.com/photo-1546213290-e1b7610339e5?q=80&w=600&auto=format&fit=crop";
+  const productImages = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
 
   return (
     <div className="bg-gray-50/50 min-h-screen py-10 px-6">
@@ -230,11 +233,32 @@ export default function ProductDetails() {
           {/* Images & Details */}
           <div className="lg:col-span-2 space-y-6">
             <Card className="overflow-hidden">
-              <img
-                src={product.image || imageFallback}
-                alt={product.title}
-                className="w-full h-96 object-cover"
-              />
+              <div className="w-full h-96 bg-gray-100 flex items-center justify-center overflow-hidden">
+                <img
+                  src={selectedImage ? (selectedImage.startsWith("http") ? selectedImage : `${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}${selectedImage}`) : imageFallback}
+                  alt={product.title}
+                  className="w-full h-full object-cover transition-all duration-300"
+                />
+              </div>
+              {productImages.length > 1 && (
+                <div className="flex gap-2 p-4 bg-gray-50 border-t border-gray-100 overflow-x-auto">
+                  {productImages.map((imgUrl) => (
+                    <button
+                      key={imgUrl}
+                      onClick={() => setSelectedImage(imgUrl)}
+                      className={`h-16 w-16 rounded-lg overflow-hidden border-2 shrink-0 transition-all ${
+                        selectedImage === imgUrl ? "border-blue-600 scale-95" : "border-gray-200 hover:border-gray-400"
+                      }`}
+                    >
+                      <img
+                        src={imgUrl.startsWith("http") ? imgUrl : `${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}${imgUrl}`}
+                        alt="Product thumbnail"
+                        className="h-full w-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
               <Card.Body className="space-y-4">
                 <div className="flex gap-2">
                   <Badge variant={product.status === "active" ? "success" : "danger"}>

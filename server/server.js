@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import bidRoutes from "./routes/bidRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 
 dotenv.config();
 
@@ -49,10 +50,13 @@ app.use((req, res, next) => {
    Routes
 ============================================ */
 
+app.use("/uploads", express.static("uploads"));
+
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/bids", bidRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/upload", uploadRoutes);
 
 /* ============================================
    Health Check

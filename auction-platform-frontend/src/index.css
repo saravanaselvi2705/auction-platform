@@ -1,1 +1,39 @@
 @import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --color-primary: #111111;
+  --color-secondary: #fbfbfb;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-secondary);
+  color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  letter-spacing: -0.02em;
+}
+
+/* Custom premium styling classes */
+.luxury-border {
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+.luxury-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.luxury-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.1);
+}

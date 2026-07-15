@@ -52,6 +52,10 @@ function AuthProvider({ children }) {
     };
   }, [token]);
 
+  const updateUser = (userData) => {
+    setUser(userData);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -60,6 +64,7 @@ function AuthProvider({ children }) {
         loading,
         login,
         logout,
+        updateUser,
       }}
     >
       {children}

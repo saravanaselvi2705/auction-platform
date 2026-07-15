@@ -7,6 +7,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
+import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword/ResetPassword";
 import Products from "../pages/Products/Products";
 import ProductDetails from "../pages/Products/ProductDetails";
 
@@ -31,6 +33,8 @@ function AppRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/unauthorized" element={<Unauthorized />} />

@@ -53,9 +53,17 @@ function Navbar() {
               <div className="h-4 w-px bg-gray-200" />
               <div className="flex items-center gap-3">
                 <Link to="/profile" className="flex items-center gap-2 group">
-                  <div className="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm group-hover:bg-blue-200 transition-colors">
-                    {user.name.charAt(0).toUpperCase()}
-                  </div>
+                  {user.profileImage ? (
+                    <img
+                      src={`${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}${user.profileImage}`}
+                      alt={user.name}
+                      className="h-8 w-8 rounded-full object-cover border border-gray-200"
+                    />
+                  ) : (
+                    <div className="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm group-hover:bg-blue-200 transition-colors">
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">
                     {user.name}
                   </span>
@@ -116,9 +124,17 @@ function Navbar() {
                 <div className="h-px bg-gray-100 my-2" />
                 <div className="flex items-center justify-between px-3 py-2">
                   <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">
-                      {user.name.charAt(0).toUpperCase()}
-                    </div>
+                    {user.profileImage ? (
+                      <img
+                        src={`${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}${user.profileImage}`}
+                        alt={user.name}
+                        className="h-8 w-8 rounded-full object-cover border border-gray-200"
+                      />
+                    ) : (
+                      <div className="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">
+                        {user.name.charAt(0).toUpperCase()}
+                      </div>
+                    )}
                     <span className="text-sm font-semibold text-gray-700">{user.name}</span>
                   </div>
                   <button

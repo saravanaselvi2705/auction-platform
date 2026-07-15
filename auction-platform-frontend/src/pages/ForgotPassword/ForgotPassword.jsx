@@ -1,53 +1,41 @@
 import { useForm } from "react-hook-form";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
-
-import { loginUser } from "../../services/authService";
-import { useAuth } from "../../context/AuthContext";
+import { forgotPassword } from "../../services/authService";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import PageTitle from "../../components/common/PageTitle";
 
-export default function Login() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
-
+export default function ForgotPassword() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm({
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
   const onSubmit = async (data) => {
     try {
-      const response = await loginUser(data);
+      const response = await forgotPassword(data.email);
       if (response.success) {
-        login(response.user, response.token);
-        toast.success("Welcome back! Login Successful.");
-        
-        // Role based redirect
-        setTimeout(() => {
-          if (response.user.role === "seller") {
-            navigate("/seller-dashboard");
-          } else {
-            navigate("/buyer-dashboard");
-          }
-        }, 1000);
+        toast.success(response.message || "Reset link sent to your email!");
+        reset();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Invalid email or password.");
+      toast.error(
+        error.response?.data?.message || "Something went wrong. Please try again."
+      );
     }
   };
 
   return (
     <div className="flex min-h-[85vh] items-center justify-center bg-gray-50/50 px-6 py-12">
-      <PageTitle title="Login to your account" />
+      <PageTitle title="Forgot Password" />
       <Toaster position="top-center" reverseOrder={false} />
 
       <motion.div
@@ -60,9 +48,9 @@ export default function Login() {
           <Link to="/" className="text-2xl font-black text-blue-600 tracking-tight">
             🏆 AuctionHub
           </Link>
-          <h2 className="mt-4 text-2xl font-black text-gray-900">Welcome Back</h2>
+          <h2 className="mt-4 text-2xl font-black text-gray-900">Forgot Password</h2>
           <p className="mt-1.5 text-sm text-gray-500 font-semibold">
-            Access your auctions, bids, and profile.
+            Enter your email and we'll send you a password reset link.
           </p>
         </div>
 
@@ -81,46 +69,22 @@ export default function Login() {
             })}
           />
 
-          <div>
-            <div className="flex justify-between items-center mb-1">
-              <label className="text-sm font-medium text-gray-700">Password</label>
-              <Link
-                to="/forgot-password"
-                className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors"
-              >
-                Forgot Password?
-              </Link>
-            </div>
-            <Input
-              type="password"
-              placeholder="••••••••"
-              error={errors.password}
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
-              })}
-            />
-          </div>
-
           <Button
             type="submit"
             className="w-full mt-2"
             loading={isSubmitting}
           >
-            Sign In
+            Send Reset Link
           </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-500 font-medium">
-          Don't have an account?{" "}
+          Remember your password?{" "}
           <Link
-            to="/register"
+            to="/login"
             className="font-bold text-blue-600 hover:text-blue-700 transition-colors"
           >
-            Sign Up
+            Sign In
           </Link>
         </p>
       </motion.div>

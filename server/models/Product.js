@@ -29,6 +29,11 @@ const productSchema = new mongoose.Schema(
       default: "",
     },
 
+    images: {
+      type: [String],
+      default: [],
+    },
+
     startingPrice: {
       type: Number,
       required: true,

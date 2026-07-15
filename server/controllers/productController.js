@@ -12,6 +12,7 @@ export const addProduct = async (req, res) => {
       startingPrice,
       auctionType,
       image,
+      images,
       auctionStart,
       auctionEnd,
     } = req.body;
@@ -25,6 +26,7 @@ export const addProduct = async (req, res) => {
       currentPrice: startingPrice,
       auctionType,
       image,
+      images,
       auctionStart,
       auctionEnd,
     });

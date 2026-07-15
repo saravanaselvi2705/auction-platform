@@ -74,9 +74,17 @@ export default function Sidebar() {
       {/* User Info Card */}
       <div className="p-6 border-b border-gray-100">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg">
-            {user?.name?.charAt(0).toUpperCase()}
-          </div>
+          {user?.profileImage ? (
+            <img
+              src={`${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}${user.profileImage}`}
+              alt={user.name}
+              className="h-10 w-10 rounded-full object-cover border border-gray-200"
+            />
+          ) : (
+            <div className="h-10 w-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg">
+              {user?.name?.charAt(0).toUpperCase()}
+            </div>
+          )}
           <div>
             <h4 className="font-bold text-gray-900 truncate max-w-[150px]">{user?.name}</h4>
             <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">

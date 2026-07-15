@@ -46,10 +46,10 @@ export default function Home() {
   ];
 
   const categories = [
-    { name: "Electronics", count: "124 items", image: "https://picsum.photos/400/300?random=10" },
-    { name: "Vehicles", count: "48 items", image: "https://picsum.photos/400/300?random=11" },
-    { name: "Art & Antiques", count: "89 items", image: "https://picsum.photos/400/300?random=12" },
-    { name: "Real Estate", count: "15 items", image: "https://picsum.photos/400/300?random=13" },
+    { name: "Fine Art", count: "89 items", image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=400&auto=format&fit=crop" },
+    { name: "Luxury Watches", count: "48 items", image: "https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=400&auto=format&fit=crop" },
+    { name: "Jewelry & Gems", count: "124 items", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=400&auto=format&fit=crop" },
+    { name: "Premium Vehicles", count: "15 items", image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=400&auto=format&fit=crop" },
   ];
 
   const steps = [
@@ -85,14 +85,14 @@ export default function Home() {
             className="flex-1 space-y-6 text-center md:text-left"
           >
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/30 text-blue-100 text-sm font-semibold">
-              <SparklesIcon className="h-4 w-4" /> Seamless Real-time Auctions
+              <SparklesIcon className="h-4 w-4" /> Live Real-Time Bidding
             </span>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-none">
-              Bid, Win, and <br />
-              <span className="text-blue-200">Sell Securely</span>
+            <h1 className="text-4xl md:text-6xl font-serif font-black tracking-tight leading-none">
+              Discover Fine Art & <br />
+              <span className="italic text-blue-200">Luxury Masterpieces</span>
             </h1>
-            <p className="text-lg md:text-xl text-blue-100 max-w-xl">
-              Experience the excitement of live bidding. List your products or compete for the best items at incredible prices on India's premier online auction platform.
+            <p className="text-lg md:text-xl text-blue-100 max-w-xl font-light">
+              Experience the excitement of global live auctions. List unique collections or place bids on rare timepieces, master paintings, and historic estate collectibles.
             </p>
             <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-2">
               <Link
@@ -119,20 +119,20 @@ export default function Home() {
             <div className="absolute -top-6 -right-6 h-12 w-12 rounded-full bg-yellow-400 text-gray-900 flex items-center justify-center font-bold text-lg rotate-12 shadow-lg">
               ✨
             </div>
-            <h3 className="text-lg font-extrabold mb-4">🏆 Featured Item</h3>
+            <h3 className="text-lg font-serif font-extrabold mb-4">🏆 Featured Highlight</h3>
             <img
-              src="https://picsum.photos/400/250?random=15"
-              alt="Featured Item"
+              src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=600&auto=format&fit=crop"
+              alt="Patek Philippe Nautilus"
               className="rounded-2xl w-full h-48 object-cover mb-4 shadow-inner"
             />
             <div className="flex justify-between items-center">
               <div>
-                <h4 className="font-bold text-lg">Vintage Leather Chronograph</h4>
-                <p className="text-xs text-blue-200">Current Bid: ₹15,000</p>
+                <h4 className="font-serif font-bold text-lg leading-tight">Patek Philippe Nautilus</h4>
+                <p className="text-xs text-blue-200 mt-1">Starting Price: ₹1,45,00,000</p>
               </div>
               <Link
                 to="/products"
-                className="rounded-lg bg-white/20 hover:bg-white text-white hover:text-blue-700 px-3 py-2 text-xs font-bold transition-all"
+                className="rounded-lg bg-white/20 hover:bg-white text-white hover:text-blue-700 px-3 py-2 text-xs font-bold transition-all shrink-0"
               >
                 Bid Now
               </Link>
