@@ -13,9 +13,11 @@ import { getProducts } from "../../services/productService";
 import ProductCard from "../../components/products/ProductCard";
 import PageTitle from "../../components/common/PageTitle";
 import Skeleton from "../../components/ui/Skeleton";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,9 +27,31 @@ export default function Home() {
         if (data.success && data.products) {
           // Display active products first, limited to 3 items
           const activeAuctions = data.products
-            .filter((p) => p.status === "active")
-            .slice(0, 3);
-          setProducts(activeAuctions);
+            .filter((p) => p.status === "active");
+          setProducts(activeAuctions.slice(0, 3));
+
+          // Group categories dynamically from actual database products
+          const catMap = {};
+          data.products.forEach((p) => {
+            if (!p.category) return;
+            const normCat = p.category.trim();
+            const key = normCat.toUpperCase();
+            if (!catMap[key]) {
+              catMap[key] = {
+                name: normCat,
+                count: 0,
+                image: p.image || ""
+              };
+            }
+            catMap[key].count += 1;
+          });
+
+          const catList = Object.values(catMap).map((c) => ({
+            name: c.name,
+            count: `${c.count} ${c.count === 1 ? "item" : "items"}`,
+            image: c.image || "https://images.unsplash.com/photo-1546213290-e1b7610339e5?q=80&w=400&auto=format&fit=crop"
+          }));
+          setCategories(catList);
         }
       } catch (error) {
         console.error("Error loading products for homepage:", error);
@@ -43,13 +67,6 @@ export default function Home() {
     { label: "Total Volume Traded", value: "₹25.4 Lakhs+", icon: BanknotesIcon },
     { label: "Active Bidders", value: "8,500+", icon: UsersIcon },
     { label: "Successful Auctions", value: "12,000+", icon: TrophyIcon },
-  ];
-
-  const categories = [
-    { name: "Fine Art", count: "89 items", image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=400&auto=format&fit=crop" },
-    { name: "Luxury Watches", count: "48 items", image: "https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=400&auto=format&fit=crop" },
-    { name: "Jewelry & Gems", count: "124 items", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=400&auto=format&fit=crop" },
-    { name: "Premium Vehicles", count: "15 items", image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=400&auto=format&fit=crop" },
   ];
 
   const steps = [
@@ -116,27 +133,51 @@ export default function Home() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex-1 w-full max-w-md bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/10 relative shadow-2xl"
           >
-            <div className="absolute -top-6 -right-6 h-12 w-12 rounded-full bg-yellow-400 text-gray-900 flex items-center justify-center font-bold text-lg rotate-12 shadow-lg">
-              ✨
-            </div>
-            <h3 className="text-lg font-serif font-extrabold mb-4">🏆 Featured Highlight</h3>
-            <img
-              src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=600&auto=format&fit=crop"
-              alt="Patek Philippe Nautilus"
-              className="rounded-2xl w-full h-48 object-cover mb-4 shadow-inner"
-            />
-            <div className="flex justify-between items-center">
-              <div>
-                <h4 className="font-serif font-bold text-lg leading-tight">Patek Philippe Nautilus</h4>
-                <p className="text-xs text-blue-200 mt-1">Starting Price: ₹1,45,00,000</p>
+          {products.length > 0 ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="flex-1 w-full max-w-md bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/10 relative shadow-2xl"
+            >
+              <div className="absolute -top-6 -right-6 h-12 w-12 rounded-full bg-yellow-400 text-gray-900 flex items-center justify-center font-bold text-lg rotate-12 shadow-lg">
+                ✨
               </div>
-              <Link
-                to="/products"
-                className="rounded-lg bg-white/20 hover:bg-white text-white hover:text-blue-700 px-3 py-2 text-xs font-bold transition-all shrink-0"
-              >
-                Bid Now
-              </Link>
-            </div>
+              <h3 className="text-lg font-serif font-extrabold mb-4">🏆 Featured Highlight</h3>
+              <img
+                src={getImageUrl(products[0].image)}
+                alt={products[0].title}
+                className="rounded-2xl w-full h-48 object-cover mb-4 shadow-inner bg-gray-100"
+              />
+              <div className="flex justify-between items-center">
+                <div className="min-w-0 pr-4">
+                  <h4 className="font-serif font-bold text-lg leading-tight truncate">{products[0].title}</h4>
+                  <p className="text-xs text-blue-200 mt-1">
+                    {products[0].highestBid > 0 ? "Current Bid" : "Starting Price"}: ₹{(products[0].highestBid > 0 ? products[0].highestBid : products[0].startingPrice).toLocaleString()}
+                  </p>
+                </div>
+                <Link
+                  to={`/products/${products[0]._id}`}
+                  className="rounded-lg bg-white/20 hover:bg-white text-white hover:text-blue-700 px-3.5 py-2 text-xs font-bold transition-all shrink-0"
+                >
+                  Bid Now
+                </Link>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="flex-1 w-full max-w-md bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/10 relative shadow-2xl flex flex-col items-center justify-center text-center h-72"
+            >
+              <ShoppingBagIcon className="h-16 w-16 text-blue-200 mb-4 stroke-1" />
+              <h3 className="text-lg font-serif font-extrabold">No Active Auctions</h3>
+              <p className="text-xs text-blue-100 max-w-xs mt-2 font-light">
+                List your first product as a seller to feature it on our premium homepage spotlight.
+              </p>
+            </motion.div>
+          )}
           </motion.div>
         </div>
       </section>
@@ -202,26 +243,32 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mt-1">Popular Categories</h2>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {categories.map((cat, idx) => (
-              <Link
-                key={idx}
-                to={`/products?category=${encodeURIComponent(cat.name)}`}
-                className="group relative h-48 rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-              >
-                <img
-                  src={cat.image}
-                  alt={cat.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-gray-900/30 to-transparent" />
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h4 className="font-bold text-lg">{cat.name}</h4>
-                  <p className="text-xs text-gray-300 font-semibold">{cat.count}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {categories.length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {categories.map((cat, idx) => (
+                <Link
+                  key={idx}
+                  to={`/products?category=${encodeURIComponent(cat.name)}`}
+                  className="group relative h-48 rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                >
+                  <img
+                    src={getImageUrl(cat.image)}
+                    alt={cat.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-gray-900/30 to-transparent" />
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h4 className="font-bold text-lg">{cat.name}</h4>
+                    <p className="text-xs text-gray-300 font-semibold">{cat.count}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-gray-500 font-medium">
+              No categories listed yet.
+            </div>
+          )}
         </div>
       </section>
 
