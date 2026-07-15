@@ -1,9 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { addProduct } from "../../services/productService";
+import { addProduct, getCategories, createCategory } from "../../services/productService";
 import { uploadImage } from "../../services/authService";
 import Input from "../../components/ui/Input";
 import Select from "../../components/ui/Select";
@@ -18,6 +18,7 @@ export default function AddProduct() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -29,6 +30,49 @@ export default function AddProduct() {
       description: "",
     },
   });
+
+  const [categoriesList, setCategoriesList] = useState([]);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [addingCategory, setAddingCategory] = useState(false);
+
+  useEffect(() => {
+    const fetchCategoriesData = async () => {
+      try {
+        const data = await getCategories();
+        if (data.success && data.categories) {
+          setCategoriesList(data.categories.map((c) => ({ value: c.name, label: c.name })));
+        }
+      } catch (err) {
+        console.error("Failed to load categories:", err);
+      }
+    };
+    fetchCategoriesData();
+  }, []);
+
+  const handleAddCategory = async (e) => {
+    e.preventDefault();
+    if (!newCategoryName.trim()) {
+      toast.error("Please enter a category name");
+      return;
+    }
+    try {
+      setAddingCategory(true);
+      const res = await createCategory({ name: newCategoryName.trim() });
+      if (res.success && res.category) {
+        toast.success("Category added successfully!");
+        setCategoriesList((prev) => [
+          ...prev,
+          { value: res.category.name, label: res.category.name },
+        ]);
+        setValue("category", res.category.name);
+        setNewCategoryName("");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to add category");
+    } finally {
+      setAddingCategory(false);
+    }
+  };
 
   const [images, setImages] = useState([]);
   const [uploading, setUploading] = useState(false);
@@ -89,14 +133,7 @@ export default function AddProduct() {
     setImages(images.filter((_, index) => index !== indexToRemove));
   };
 
-  const categories = [
-    { value: "Electronics", label: "Electronics" },
-    { value: "Vehicles", label: "Vehicles" },
-    { value: "Art & Antiques", label: "Art & Antiques" },
-    { value: "Real Estate", label: "Real Estate" },
-    { value: "Fashion", label: "Fashion & Lifestyle" },
-    { value: "Collectibles", label: "Collectibles" },
-  ];
+
 
   const auctionTypes = [
     { value: "traditional", label: "Traditional (Ascending)" },
@@ -166,15 +203,34 @@ export default function AddProduct() {
             })}
           />
 
-          <Select
-            label="Category"
-            placeholder="Choose category"
-            options={categories}
-            error={errors.category}
-            {...register("category", {
-              required: "Category is required",
-            })}
-          />
+          <div className="space-y-1">
+            <Select
+              label="Category"
+              placeholder="Choose category"
+              options={categoriesList}
+              error={errors.category}
+              {...register("category", {
+                required: "Category is required",
+              })}
+            />
+            <div className="pt-2 flex items-center gap-2">
+              <input
+                type="text"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                placeholder="Add new category..."
+                className="w-full text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 focus:border-blue-600 focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={handleAddCategory}
+                disabled={addingCategory}
+                className="text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 px-3 py-1.5 rounded-lg shrink-0 transition-colors"
+              >
+                {addingCategory ? "Adding..." : "+ Add"}
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2">

@@ -9,6 +9,7 @@ import productRoutes from "./routes/productRoutes.js";
 import bidRoutes from "./routes/bidRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 import { autoCloseExpiredAuctions } from "./utils/autoClose.js";
 
 dotenv.config();
@@ -55,6 +56,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/bids", bidRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/categories", categoryRoutes);
 
 /* ============================================
    Health Check

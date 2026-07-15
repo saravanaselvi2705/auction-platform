@@ -29,3 +29,13 @@ export const closeAuction = async (id) => {
   const response = await api.put(`/products/${id}/close`);
   return response.data;
 };
+
+export const getCategories = async () => {
+  const response = await api.get("/categories");
+  return response.data;
+};
+
+export const createCategory = async (categoryData) => {
+  const response = await api.post("/categories", categoryData);
+  return response.data;
+};
