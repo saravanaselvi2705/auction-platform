@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import Badge from "../ui/Badge";
 import Card from "../ui/Card";
 import { getImageUrl } from "../../utils/getImageUrl";
+import { useAuth } from "../../context/AuthContext";
 
 export default function ProductCard({ product }) {
+  const { user } = useAuth();
   const [timeLeft, setTimeLeft] = useState("");
 
   const imageFallback = "https://images.unsplash.com/photo-1546213290-e1b7610339e5?q=80&w=600&auto=format&fit=crop";
@@ -114,7 +116,9 @@ export default function ProductCard({ product }) {
           to={`/products/${product._id}`}
           className="w-full text-center block rounded-xl bg-blue-600 hover:bg-blue-700 py-3 font-bold text-white transition-all text-sm"
         >
-          {product.status === "active" ? "Bid & View Auction" : "View Results"}
+          {product.status === "active"
+            ? (user?.role === "seller" ? "View Auction" : "Bid & View Auction")
+            : "View Results"}
         </Link>
       </Card.Footer>
     </Card>

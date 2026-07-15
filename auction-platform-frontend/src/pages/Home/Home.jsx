@@ -14,8 +14,10 @@ import ProductCard from "../../components/products/ProductCard";
 import PageTitle from "../../components/common/PageTitle";
 import Skeleton from "../../components/ui/Skeleton";
 import { getImageUrl } from "../../utils/getImageUrl";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Home() {
+  const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -160,7 +162,7 @@ export default function Home() {
                   to={`/products/${products[0]._id}`}
                   className="rounded-lg bg-white/20 hover:bg-white text-white hover:text-blue-700 px-3.5 py-2 text-xs font-bold transition-all shrink-0"
                 >
-                  Bid Now
+                  {user?.role === "seller" ? "View Auction" : "Bid Now"}
                 </Link>
               </div>
             </motion.div>

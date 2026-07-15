@@ -35,6 +35,14 @@ function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden items-center gap-6 md:flex">
+          {user && (
+            <NavLink
+              to={user.role === "seller" ? "/seller-dashboard" : "/buyer-dashboard"}
+              className={navLinkClass}
+            >
+              Dashboard
+            </NavLink>
+          )}
           <NavLink to="/" className={navLinkClass}>
             Home
           </NavLink>
@@ -44,13 +52,6 @@ function Navbar() {
 
           {user ? (
             <>
-              <Link
-                to={user.role === "seller" ? "/seller-dashboard" : "/buyer-dashboard"}
-                className="text-gray-600 hover:text-blue-600 transition-colors duration-200 px-1 py-2 text-sm font-medium"
-              >
-                Dashboard
-              </Link>
-              <div className="h-4 w-px bg-gray-200" />
               <div className="flex items-center gap-3">
                 <Link to="/profile" className="flex items-center gap-2 group">
                   {user.profileImage ? (
@@ -102,6 +103,15 @@ function Navbar() {
       {isOpen && (
         <div className="border-t border-gray-100 bg-white md:hidden animate-in fade-in duration-200">
           <div className="flex flex-col space-y-2 px-6 py-5">
+            {user && (
+              <NavLink
+                to={user.role === "seller" ? "/seller-dashboard" : "/buyer-dashboard"}
+                className={mobileNavLinkClass}
+                onClick={() => setIsOpen(false)}
+              >
+                Dashboard
+              </NavLink>
+            )}
             <NavLink to="/" className={mobileNavLinkClass} onClick={() => setIsOpen(false)}>
               Home
             </NavLink>
@@ -111,13 +121,6 @@ function Navbar() {
 
             {user ? (
               <>
-                <NavLink
-                  to={user.role === "seller" ? "/seller-dashboard" : "/buyer-dashboard"}
-                  className={mobileNavLinkClass}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Dashboard
-                </NavLink>
                 <NavLink to="/profile" className={mobileNavLinkClass} onClick={() => setIsOpen(false)}>
                   My Profile
                 </NavLink>
